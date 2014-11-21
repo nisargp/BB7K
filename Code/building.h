@@ -10,8 +10,10 @@
 #define _building_h
 
 #include "square.h"
+#include "string.h"
 
 class Player;
+class Gameboard;
 
 class Building : public Square{
 protected:
@@ -22,15 +24,14 @@ protected:
     Player* owner;
     
 public:
-    Building();
-    virtual bool isOwned() = 0;
-    virtual bool isMortgaged() = 0;
-    virtual bool mortgage() = 0;
-    virtual bool unmortgage() = 0;
-    virtual int getPurchaseCost() = 0; // need to check if can afford to buy the property
+    Building(std::string name, int numSiblings, int purchaseCost);
+    virtual bool isOwned();
+    virtual bool isMortgaged();
+    virtual void mortgage() = 0;
+    virtual void unmortgage();
+    virtual int getPurchaseCost(); // need to check if can afford to buy the property
     virtual void purchase(Player *p) = 0; // buy property
     virtual void pay (Player *p) = 0; // pay tuition/rent
-    ~Building();
 };
 
 #endif

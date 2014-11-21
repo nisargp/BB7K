@@ -13,20 +13,15 @@
 class Player;
 
 class Residence: public Building {
-    int numResidencesOwned; // number of residences owned by the owner
-    int tuition[4];
+   // int numResidencesOwned; // number of residences owned by the owner
+    int rent[4];
     
 public:
     Residence();
-    bool isOwned();
-    bool isMortgaged();
-    void mortgage();
-    void unmortgage();
-    int getPurchaseCost();
+    void mortgage(std::string name, int numSiblings, int purchaseCost);
     void purchase(Player* p);
     void pay(Player *p);
-    void getRent(); // check to see if player can afford rent
-    ~Residence();
+    int getRent(); // check to see if player can afford rent
 };
 
 

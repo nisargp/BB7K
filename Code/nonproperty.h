@@ -14,9 +14,8 @@ class Player;
 
 class NonProperty: public Square{
 public:
-    NonProperty();
+    NonProperty(std::string name);
     void land(Player *p);
-    ~NonPropety();
 };
 
 

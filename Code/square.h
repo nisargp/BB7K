@@ -12,8 +12,9 @@
 #include <string>
 
 class Square{
+public:
     std::string name;
-    Square();
+    Square(name);
     virtual ~Square() = 0;
 };
 #endif

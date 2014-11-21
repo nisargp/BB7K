@@ -23,20 +23,15 @@ class Academic: public Building {
     int tuition[6];
     TextDisplay* td;
     
-    void notifyTextDisplay();
+    void notifyTextDisplay(int changeImprovements);
     
 public:
-    Academic();
-    bool isOwned();
-    bool isMortgaged();
+    Academic(std::string name, int numSiblings, int purchaseCost, std::string block, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td);
     void mortgage();
-    void unmortgage();
-    int getPurchaseCost();
     void purchase(Player* p);
     void pay(Player *p);
     void improve(int numImprovments); // 1 for improve, -1 for removing an improvement
-    void getTuition(); // check to see if player can afford tuition
-    ~Academic();
+    int getTuition(); // check to see if player can afford tuition
 };
 
 #endif

@@ -17,16 +17,11 @@ class Gym: public Building {
     int currRent;
     
 public:
-    Gym();
-    bool isOwned();
-    bool isMortgaged();
+    Gym(string name, int numSiblings, int purchaseCost, int currRent);
     void mortgage();
-    void unmortgage();
-    int getPurchaseCost();
     void purchase(Player* p);
     void pay(Player *p);
-    void getRent(); // check to see if player can afford rent
-    ~Gym();
+    int getRent(); // check to see if player can afford rent
 };
 
 
