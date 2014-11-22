@@ -12,9 +12,9 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include "square.h"
+#include "textdisplay.h"
 
-class Square;
-class TextDisplay;
 class Academic;
 class Residence;
 class Gym;
