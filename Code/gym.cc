@@ -13,7 +13,7 @@
 using namespace std;
 
 
-Gym::Gym(string name, int numSiblings, int purchaseCost): Building(name, numSiblings, purchaseCost), currRent(0), bothOwned(false){}
+Gym::Gym(string name, int sqrNum, int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, bothOwned): Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner), currRent(0), bothOwned(bothOwned){}
 
 
 void::Gym::mortgage(){

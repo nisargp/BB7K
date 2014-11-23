@@ -11,8 +11,8 @@
 
 using namespace std;
 
-Academic::Academic(std::string name, int numSiblings, int purchaseCost, std::string block, int improvementCost, int *tuition, TextDisplay *td)
-        : Building(name, numSiblings, purchaseCost), block(block), blockOwned(false), improvementCost(improvementCost), improvementLevel(0), td(td){
+Academic::Academic(string name, int sqrNum,int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, std::string block, bool blockOwned, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td)
+        : Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner), block(block), blockOwned(blockOwned), improvementCost(improvementCost), improvementLevel(improvementLevel), td(td){
             for (int i = 0; i < 6; i++){
                 this->tuition[i] = tuition[i];
             }
@@ -94,7 +94,7 @@ void Academic::purchase(Player* p){
         
         owned = true;
         owner = p;
-        
+        // need to check if it exists first (do the same for the other properties)
         owner->buildingCatalogue[block]++;
         if (p->buildingCatalogue[block] == numSiblings) blockOwned == true;
     }

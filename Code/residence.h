@@ -17,8 +17,8 @@ class Residence: public Building {
     int rent[4];
     
 public:
-    Residence();
-    void mortgage(std::string name, int numSiblings, int purchaseCost);
+    Residence(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, int rent*);
+    void mortgage();
     void purchase(Player* p);
     void pay(Player *p);
     int getRent(); // check to see if player can afford rent

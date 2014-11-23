@@ -11,8 +11,8 @@
 using namespace std;
 
 
-Building::Building(string name, int numSiblings, int purchaseCost)
-        : Square(name), numSiblings(numSiblings), purchaseCost(purchaseCost), owned(false), mortgaged(false), p(NULL){}
+Building::Building(string name, int sqrNum, int numSiblings, int purchaseCost,bool owned, bool mortgaged, Player* owner)
+        : Square(name, sqrNum), numSiblings(numSiblings), purchaseCost(purchaseCost), owned(owned), mortgaged(mortgaged), p(owner){}
 
 bool Building::isOwned(){ return owned; }
 

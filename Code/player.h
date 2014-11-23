@@ -22,7 +22,7 @@ class Player{
     int money;
     
     Square* currPosition;
-    int position;
+    int position; // what is this for?
     
     int numAssets;
     string property[28];
@@ -34,7 +34,7 @@ class Player{
     bool bankruptcy; // update if player can decalre bankruptcy
 
 public:
-    Player();
+    Player(std::string name, char piece, int money, Square* currPosition, int position, int numAssets, string * property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int payOut, bool bankruptcy);
     std::map<std::string, int> buildingCatalogue;
     
     virtual void roll() = 0; // update the position by adding the roll, sets currPosition to the square of the gameboard at that position
@@ -46,6 +46,11 @@ public:
     virtual void isBankrupt() = 0;
     virtual void declareBankruptcy() = 0;
     virtual ~Player();
+    
+    virtual int getTotalWorth() = 0; // gets your total worth (including your savings, printed prices of all buildings you own and costs of each improvement)
+    virtual int addCup(RUTRCUP * cup);
+    
+    friend void NonProperty::land(Player* p);
 };
 
 

@@ -26,7 +26,7 @@ class Academic: public Building {
     void notifyTextDisplay(int changeImprovements);
     
 public:
-    Academic(std::string name, int numSiblings, int purchaseCost, std::string block, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td);
+    Academic(std::string name, int sqrNum, int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, std::string block, bool blockOwned, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td);
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);

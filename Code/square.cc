@@ -10,6 +10,8 @@
 
 using namespace std;
 
-Square::Square(string name): name(name){}
+Square::Square(string name, int sqrNum): name(name), sqrNum(sqrNum){}
 
 Square::~Square(){}
+
+in Square::getSquareNum(){ return sqrNum; }

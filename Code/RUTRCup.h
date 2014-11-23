@@ -11,9 +11,11 @@
 
 class RUTRCup{
     static int cupCount;
-    // constructor checks the numbre of cup counts
-public:
+    // constructor checks the number of cup counts
     RUTRCup();
+    
+public:
+    RUTRCup * getCup();
     // destructor subtracts one from the number of cups
     ~RUTRCup();
     

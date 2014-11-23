@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Residence::Residence(string name, int numSiblings, int purchaseCost, int * rent): Building(name, numSiblings, purchaseCost){
+Residence::Residence(string name, int sqrNum, int numSiblings, int purchaseCost,bool owned, bool mortgaged, Player* owner, int * rent): Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner){
     for (int i = 0; i < 4; i++){
         this->rent[i] = rent[i];
     }

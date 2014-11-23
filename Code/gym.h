@@ -17,7 +17,7 @@ class Gym: public Building {
     int currRent;
     
 public:
-    Gym(string name, int numSiblings, int purchaseCost, int currRent);
+    Gym(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, bool bothOwned);
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);

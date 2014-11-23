@@ -24,7 +24,7 @@ protected:
     Player* owner;
     
 public:
-    Building(std::string name, int numSiblings, int purchaseCost);
+    Building(std::string name, int sqrNum, int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner);
     virtual bool isOwned();
     virtual bool isMortgaged();
     virtual void mortgage() = 0;
