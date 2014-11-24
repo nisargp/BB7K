@@ -9,19 +9,26 @@
 #ifndef _residence_h
 #define _residence_h
 
-#including "building.h"
+#include "building.h"
+
+#include <string>
+
 class Player;
 
 class Residence: public Building {
-   // int numResidencesOwned; // number of residences owned by the owner
     int rent[4];
     
 public:
-    Residence(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, int rent*);
+    Residence(std::string name, int sqrNum, int numSiblings, int purchaseCost, std::string block, int currRent, bool owned, bool mortgaged, Player* owner, int rent*);
+    
+    // Get private values
+    int getRent(); // check to see if player can afford rent
+    
+    // Change private values
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);
-    int getRent(); // check to see if player can afford rent
+    
 };
 
 

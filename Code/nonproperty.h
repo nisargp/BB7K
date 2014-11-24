@@ -10,6 +10,8 @@
 #define _nonproperty_h
 
 #include "square.h"
+#include <string>
+
 class Player;
 
 class NonProperty: public Square{

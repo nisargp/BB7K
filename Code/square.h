@@ -12,11 +12,13 @@
 #include <string>
 
 class Square{
-    int sqrNum;
-public:
+    int sqrNum; // number in the array for the gameboard
     std::string name;
+    
+public:
     Square(std::string name, int sqrNum);
     int getSquareNum();
-    virtual ~Square() = 0;
+    std::string getName(); // note: this is a new addition - may cause errors if I called 'name' directly and didn't change it
+    virtual void land(Player *p) = 0;
 };
 #endif

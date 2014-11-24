@@ -10,8 +10,11 @@
 
 using namespace std;
 
+// Constructor
 Square::Square(string name, int sqrNum): name(name), sqrNum(sqrNum){}
 
-Square::~Square(){}
+// Returns the number in the array for the gameboard
+int Square::getSquareNum(){ return sqrNum; }
 
-in Square::getSquareNum(){ return sqrNum; }
+// Returns the name of the square
+string Square::getName(){ return name; }

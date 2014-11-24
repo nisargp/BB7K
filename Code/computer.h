@@ -27,7 +27,6 @@ public:
     bool accept(int give, std::string receive);
     bool accept(std::string give, std::string receive);
     bool accept(std::string give, std::string receive);
-    int getMoney(); // returns the amount of money that the computer player has
     ~Computer();
 };
 

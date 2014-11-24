@@ -10,6 +10,8 @@
 #define _gym_h
 
 #include "building.h"
+#include <string>
+
 class Player;
 
 class Gym: public Building {
@@ -17,11 +19,16 @@ class Gym: public Building {
     int currRent;
     
 public:
-    Gym(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, bool bothOwned);
+    Gym(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, std::string block bool bothOwned);
+    
+    // Get private values
+    int getRent(); // check to see if player can afford rent
+    
+    // Change private values
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);
-    int getRent(); // check to see if player can afford rent
+    
 };
 
 

@@ -11,77 +11,107 @@
 
 using namespace std;
 
-Academic::Academic(string name, int sqrNum,int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, std::string block, bool blockOwned, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td)
-        : Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner), block(block), blockOwned(blockOwned), improvementCost(improvementCost), improvementLevel(improvementLevel), td(td){
+
+// Constructor
+Academic::Academic(string name, int sqrNum,int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, string block, bool blockOwned, int improvementCost, int improvementLevel, int *tuition, TextDisplay *td)
+        : Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner, block), blockOwned(blockOwned), improvementCost(improvementCost), improvementLevel(improvementLevel), td(td){
             for (int i = 0; i < 6; i++){
                 this->tuition[i] = tuition[i];
             }
 }
 
 
+
+// Notify (Observer Pattern)
 void Academic::notifyTextDisplay(int changeImprovements){
-    td->notify(name, changeImprovements);
+    td->notify(getName(), changeImprovements);
 }
 
+
+
+ // Get private values
+int Academic::getTuition(){
+    if (!mortgaged) {
+        if(improvementLevel == 0 && blockOwned){
+            return tuition[improvementLevel] * 2; // Tuition will be twice the cost if a player owns the entire block
+        }
+        return tuition[improvementLevel];
+    }
+    else return 0;
+}
+
+int Academic::getImprovementCost(){ return improvementCost; }
+
+int Academic::getImprovementLevel(){ return improvementLevel; }
+
+
+// Change private values
 void Academic::mortgage(){
+    
+    // Can only mortage without improvements
     if(improvementLevel != 0) {
         cout<< "You must sell all improvements before mortgaging the property." << endl;
-        cout<< "Would you still like to mortgage the building? (Y/N)" << endl;
+        cout<< "Would you like to continue? (Y/N)" << endl;
         
         string s;
-        cin>>s;
+        
+        
+        if (dynamic_cast<Computer*>(p)) s = "Y";
+        else cin>>s;
+        
         if (s == N || s == n) return;
         
         while(improvementLevel != 0){
             improve(-1);
         }
     }
-    
-    owner->trade(0, purchaseCost/2);
-    mortgaged = true;
-    cout << name << " has been mortgaged." << endl;
+    if (!mortgaged){
+        owner->trade(0, getPurchaseCost()/2); // get 1/2 the purchase cost when mortgaging a building
+        mortgaged = true;
+        cout << getName() << " has been mortgaged." << endl;
+    }
+    else cout << getName() << " has already been mortgaged." << endl;
 }
-
-int Academic::getTuition(){ return tuition[improvementLevel]; }
 
 
 void Academic::pay(Player *p){
     if (!mortgaged){
-        if(improvementLevel == 0 && blockOwned){
-            p->trade(tuition[improvementLevel] * 2, 0);
-            owner->trade(0, tuition[improvementLevel] * 2);
-        }
-        else {
-            p->trade(tuition[improvementLevel], 0);
-            owner->trade(0, tuition[improvementLevel]);
-        }
-
+        int pay;
+        
+        // tuition is twice the price if the entire block is owned (and there are no improvements
+        if(improvementLevel == 0 && blockOwned){ pay = tuition[improvementLevel] * 2; }
+        else { pay = tuition[improvementLevel]; }
+        
+        p->trade(pay, 0); // player pays owner
+        owner->trade(0, pay); // owner receives tuition
+        cout << p->getName() << " paid " << owner->getName() << " $" << pay << " in tuition." << endl;
     }
     else {
-        cout << "The building is mortgaged. No tuition is required." << endl;
+        cout << getName() << " is mortgaged. No tuition is required." << endl; // no payment if the building is mortgaged
     }
 }
 
+
 void Academic::improve(int numImprovments){
-    if (numImprovments == 1){
+    if (numImprovments == 1){ // add an improvement
         if (blockOwned){
             if (improvementLevel < 5){
                 owner->trade(improvementCost, 0);
                 numImprovments++;
                 notifyTextDisplay(numImprovments);
             }
-            else cout << "You already have a maximum number of improvements on your building." << endl;
+            else cout << "You already have a maximum number of improvements on " << getName() << "." << endl;
         }
-        else cout<< "You must own the entire block to get improvements." << endl;
+        else cout<< "You must own the entire block (" << getBlock() << ") to get improvements on " << getName() << "."<< endl;
         
     }
-    else if (numImprovments == -1){
+    else if (numImprovments == -1){ // remove an improvement
         if (numImprovments != 0){
-            owner->trade(0, improvementCost/2);
+            owner->trade(0, improvementCost / 2); // get back only half the cost of an improvement
             numImprovments--;
             notifyTextDisplay(numImprovments);
         }
-        else cout << "You don't have any improvements on this building to remove." << endl;
+        else cout << "You don't have any improvements on " << getName() << " to remove." << endl;
     }
     
 }
@@ -90,14 +120,19 @@ void Academic::improve(int numImprovments){
 
 void Academic::purchase(Player* p){
     if (!owned){
-        owner->trade(purchaseCost, 0);
-        
         owned = true;
         owner = p;
-        // need to check if it exists first (do the same for the other properties)
-        owner->buildingCatalogue[block]++;
+        owner->trade(purchaseCost, 0);
+        owner->buildingCatalogue[block]++; // do you need to see if it exists first?
         if (p->buildingCatalogue[block] == numSiblings) blockOwned == true;
+        cout << p->getName() << " bought " << getName() << "." << endl;
     }
-    
-    
 }
+
+
+
+
+
+
+
+

@@ -12,43 +12,72 @@
 
 #include <string>
 #include <map>
+
 class Square;
 class RUTRCup;
 
 
 class Player{
+protected:
     std::string name;
     char piece;
     int money;
     
     Square* currPosition;
-    int position; // what is this for?
     
     int numAssets;
-    string property[28];
+    Square* property[28];
     
     RUTRCup * cup [4];
     int numCups;
-    bool DCTimsLine;
-    int payOut; //amount of money owed for rent/tutition
-    bool bankruptcy; // update if player can decalre bankruptcy
+    
+    Gameboard * g; 
 
 public:
-    Player(std::string name, char piece, int money, Square* currPosition, int position, int numAssets, string * property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int payOut, bool bankruptcy);
     std::map<std::string, int> buildingCatalogue;
     
-    virtual void roll() = 0; // update the position by adding the roll, sets currPosition to the square of the gameboard at that position
-    virtual void notify() = 0;
-    virtual void trade(int give, int receive) = 0; // function to perform the actual trade
-    virtual void trade(std::string give, int receive) = 0;
-    virtual void trade(int give, std::string receive) = 0;
-    virtual void trade(std::string give, std::string receive) = 0;
-    virtual void isBankrupt() = 0;
-    virtual void declareBankruptcy() = 0;
+    int payOut; //amount of money owed for rent/tutition (check if == 0 after every turn)
+    
+    bool bankruptcy; // update if player can decalre bankruptcy
+    
+    bool DCTimsLine;
+    int numTurnsDC;
+    
+    
+    Player(std::string name, char piece, int money, Square* currPosition, int numAssets, Square ** property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy);
+    
+    
+    // Notifies text display to move piece around the board
+    void notify();
+    
+    
+    // Get Methods
+    int getTotalWorth(); // gets your total worth (including your savings, printed prices of all buildings you own and costs of each improvement)
+    std::string getName();
+    int getMoney();
+    
+    
+    
+    // Add methods
+    int addCup(RUTRCUP * cup);
+    
+    
+    // Gameplay
+    void roll(int move); // update the position by adding the roll, sets currPosition to the square of the gameboard at that position
+    void trade(int give, int receive); // function to perform the actual trade
+    void trade(std::string give, int receive);
+    void trade(int give, std::string receive);
+    void trade(std::string give, std::string receive);
+    void declareBankruptcy(Player *p);
+    void declareBankruptcy();
+    
+    // Pure Virtual Methods
+    virtual void buyProperty() = 0; // calls purchase if it wants to buy the property
+    virtual void pay() = 0; // calls pay if the player has enough funds, otherwise they must declare bankruptcy
+    
+    
     virtual ~Player();
     
-    virtual int getTotalWorth() = 0; // gets your total worth (including your savings, printed prices of all buildings you own and costs of each improvement)
-    virtual int addCup(RUTRCUP * cup);
     
     friend void NonProperty::land(Player* p);
 };

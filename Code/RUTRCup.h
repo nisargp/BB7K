@@ -18,7 +18,6 @@ public:
     RUTRCup * getCup();
     // destructor subtracts one from the number of cups
     ~RUTRCup();
-    
 };
 
 #endif

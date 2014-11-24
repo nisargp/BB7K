@@ -14,16 +14,9 @@
 
 class Human: public Player{
 public:
-    Human();
-    void roll();
-    void notify();
-    void trade(int give, int receive);
-    void trade(std::string give, int receive);
-    void trade(int give, std::string receive);
-    void trade(std::string give, std::string receive);
-    void isBankrupt();
-    void declareBankruptcy();
-    ~Human();
+    Human(std::string name, char piece, int money, Square* currPosition, int numAssets, Square ** property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy);
+    void buyProperty(); // calls purchase if it wants to buy the property
+    void pay(); // calls pay if the player has enough funds, otherwise they must declare bankruptcy
 };
 
 
