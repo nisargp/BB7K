@@ -43,11 +43,13 @@ TextDisplay::TextDisplay() {
 
 void TextDisplay::notify(string name, int numImprovement){
     if (numImprovement > 0) {
-        improvementLocation[name] += "I";
+        for (int i = 0; i < numImprovement ; i++) {
+            improvementLocation[name] += "I";
+        }
     }
     else if(numImprovement < 0) {
         int length = improvementLocation[name].length();
-        improvementLocation[name] = improvementLocation[name].substr (0, length - 1);
+        improvementLocation[name] = improvementLocation[name].substr (0, length - numImprovement);
     }
 }
 
