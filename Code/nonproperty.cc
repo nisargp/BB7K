@@ -7,6 +7,9 @@
 //
 
 #include "nonproperty.h"
+#include "player.h"
+#include "gameboard.h"
+#include "RUTRCup.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -20,7 +23,7 @@ void NonProperty::land(Player *p){
     cout<<"You have landed on: " << getName() << "." << endl;
     
     
-    if (getName() == "Collect OSAP"){
+    if (getName() == "COLLECT OSAP"){
         // should we only have give out money when they pass to avoid giving money out twice?
     }
     
@@ -30,9 +33,9 @@ void NonProperty::land(Player *p){
     }
     
     
-    else if (getName() == "Go to Tims"){
+    else if (getName() == "GO TO TIMS"){
         p->DCTimsLine = true;
-        p->currLocation = g->getSquare(10);
+        p->currPosition = g->getSquare(10);
         cout << "You have been sent to the DC Tims Line." << endl;
     }
     
@@ -42,39 +45,26 @@ void NonProperty::land(Player *p){
     }
     
     
-    else if (getName() == "Tuition"){
+    else if (getName() == "TUITION"){
         int payTotalWorth = 0.1 * p->getTotalWorth();
+        cout<< "You must pay $300 or $" << payTotalWorth << "in tuition." << endl;
         
         if (300 >= payTotalWorth){
             p->trade(300, 0);
-            cout << "You have paid $300 in tuition." << endl;
         } else {
-            if (p->getMoney - payTotalWorth < 0) {
-                p->payOut = payTotalWorth;
-                p->bankruptcy = true;
-                cout << "You owe $" << payTotalWorth << " but you only have $" << p->getMoney << "." << endl;
-                return;
-            }
             p->trade(payTotalWorth, 0);
-            cout << "You have paid $" << payTotalWorth << " in tuition." << endl;
         }
     }
     
     
-    else if (getName() == "Coop Fee"){
-        if (p->getMoney - 150 < 0) {
-            p->payOut = 150;
-            p->bankruptcy = true;
-            return;
-            cout << "You owe $150 but you only have $" << p->getMoney << "." << endl;
-        }
+    else if (getName() == "COOP FEE"){
+        cout << "You must a $150 coop fee." << endl;
         p->trade(150, 0);
-        cout << "You have paid a $150 coop fee." << endl;
     }
     
     
-    else if (getName() == "SLC"){
-        int randNum = rand % 100 + 1;
+    else if (getName().substr(0, 3) == "SLC"){
+        int randNum = rand() % 100 + 1;
         
         if (randNum == 1){
             RUTRCup * cup = RUTRCup::getCup();
@@ -87,95 +77,95 @@ void NonProperty::land(Player *p){
             }
         }
         else { // SLC probabilities
-            randNum = rand % 48 + 1;
+            randNum = rand() % 48 + 1;
             
             if (randNum >= 1 && randNum <= 6){
                 // move back 3
                 cout << "Move back 3." << endl;
-                int newSquare = p->currLocation->getSquareNum - 3;
+                int newSquare = p->currPosition->getSquareNum() - 3;
                 if (newSquare < 0){
                     newSquare = 40 - newSquare;
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum >= 7 && randNum <= 14){
                 // move back 2
                 cout << "Move back 2." << endl;
-                int newSquare = p->currLocation->getSquareNum - 2;
+                int newSquare = p->currPosition->getSquareNum() - 2;
                 if (newSquare < 0){
                     newSquare = 40 - newSquare;
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum >= 15 && randNum <= 22){
                 // move back 1
                 cout << "Move back 1." << endl;
-                int newSquare = p->currLocation->getSquareNum - 1;
+                int newSquare = p->currPosition->getSquareNum() - 1;
                 if (newSquare < 0){
                     newSquare = 40 - newSquare;
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum >= 23 && randNum <= 28){
                 // move forward 1
                 cout << "Move forward 1." << endl;
-                int newSquare = p->currLocation->getSquareNum + 1;
+                int newSquare = p->currPosition->getSquareNum() + 1;
                 if (newSquare > 39){
                     newSquare -= 40;
                     cout << "You have passed Collect OSAP and collected $200." << endl;
                     p->trade(0,200);
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum >= 29 && randNum <= 36){
                 // move forward 2
                 cout << "Move forward 2." << endl;
-                int newSquare = p->currLocation->getSquareNum + 2;
+                int newSquare = p->currPosition->getSquareNum() + 2;
                 if (newSquare > 39){
                     newSquare -= 40;
                     cout << "You have passed Collect OSAP and collected $200." << endl;
                     p->trade(0,200);
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum >= 37 && randNum <= 44){
                 // move forward 3
                 cout << "Move forward 3." << endl;
-                int newSquare = p->currLocation->getSquareNum + 3;
+                int newSquare = p->currPosition->getSquareNum() + 3;
                 if (newSquare > 39){
                     newSquare -= 40;
                     cout << "You have passed Collect OSAP and collected $200." << endl;
                     p->trade(0,200);
                 }
-                p->currLocation = g->getSquare(newSquare);
-                p->currLocation->land(p);
+                p->currPosition = g->getSquare(newSquare);
+                p->currPosition->land(p);
                 p->notify();
             }
             
             else if (randNum == 45 || randNum == 46){
                 p->DCTimsLine = true;
-                p->currLocation = g->getSquare(10);
+                p->currPosition = g->getSquare(10);
                 cout << "You have been sent to the DC Tims Line." << endl;
                 p->notify();
             }
             
             else if (randNum == 47 || randNum == 48){
-                p->currLocation = g->getSquare(0);
+                p->currPosition = g->getSquare(0);
                 cout << "You have been sent to Collect OSAP and collected $200." << endl;
                 p->trade(0,200);
                 p->notify();
@@ -184,8 +174,8 @@ void NonProperty::land(Player *p){
     }
     
     
-    else if (getName() == "Needles Hall"){
-        int randNum = rand % 100 + 1;
+    else if (getName().substr(0, 12) == "NEEDLES HALL"){
+        int randNum = rand() % 100 + 1;
         
         if (randNum == 1){
             RUTRCup * cup = RUTRCup::getCup();
@@ -198,40 +188,22 @@ void NonProperty::land(Player *p){
             }
         }
         else { // Needles Hall probabilites
-            randNum = rand % 18 + 1;
+            randNum = rand() % 18 + 1;
             
             if (randNum == 1){
-                if (p->getMoney - 200 < 0) {
-                    p->payOut = 200;
-                    p->bankruptcy = true;
-                    return;
-                    cout << "You owe $200 but you only have $" << p->getMoney << "." << endl;
-                }
                 // lose 200$
+                cout << "You must pay $200." << endl;
                 p->trade(200,0);
-                cout << "You have lost $200." << endl;
             }
             else if (randNum == 2 || randNum == 3){
-                if (p->getMoney - 100 < 0) {
-                    p->payOut = 100;
-                    p->bankruptcy = true;
-                    return;
-                    cout << "You owe $100 but you only have $" << p->getMoney << "." << endl;
-                }
                 // lose 100$
+                cout << "You must pay $100." << endl;
                 p->trade(100,0);
-                cout << "You have lost $100." << endl;
             }
             else if (randNum >= 4 && randNum <= 6){
-                if (p->getMoney - 50 < 0) {
-                    p->payOut = 50;
-                    p->bankruptcy = true;
-                    return;
-                    cout << "You owe $50 but you only have $" << p->getMoney << "." << endl;
-                }
                 // lose 50$
+                cout << "You must pay $500." << endl;
                 p->trade(50,0);
-                cout << "You have lost $50." << endl;
             }
             else if (randNum >= 7 && randNum <= 12){
                 // gain 25$

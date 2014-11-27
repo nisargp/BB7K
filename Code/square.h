@@ -11,6 +11,8 @@
 
 #include <string>
 
+class Player;
+
 class Square{
     int sqrNum; // number in the array for the gameboard
     std::string name;
@@ -20,5 +22,6 @@ public:
     int getSquareNum();
     std::string getName(); // note: this is a new addition - may cause errors if I called 'name' directly and didn't change it
     virtual void land(Player *p) = 0;
+    virtual ~Square() = 0;
 };
 #endif

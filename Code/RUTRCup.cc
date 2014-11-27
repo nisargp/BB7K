@@ -8,13 +8,14 @@
 
 #include "RUTRCup.h"
 
-using namespace std;
-
 RUTRCup::RUTRCup(){ cupCount++; }
 
 RUTRCup* RUTRCup::getCup(){
-    if (cupCount == 4) return NULL;
-    else return new RUTRCup; // is this possible?
+    if (cupCount == 4) return 0;
+    else {
+        RUTRCup * cup = new RUTRCup;
+        return cup;
+    }
 }
 
-RUTRCup::RUTRCup(){ cupCount--; }
+RUTRCup::~RUTRCup(){ cupCount--; }

@@ -10,24 +10,24 @@
 #define _computer_h
 
 #include <string>
-#inlcude "player.h"
+#include "player.h"
 
 class Computer: public Player{
 public:
-    Computer();
-    void roll();
-    void notify();
-    void trade(int give, int receive);
-    void trade(std::string give, int receive);
-    void trade(int give, std::string receive);
-    void trade(std::string give, std::string receive);
-    void isBankrupt();
-    void declareBankruptcy();
+    Computer(std::string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy,TextDisplay* td);
+
+    void buyProperty(Building * b); // calls purchase if it wants to buy the property
+    void payPlayer(Building * b); // calls pay if the player has enough funds, otherwise they must declare bankruptcy
+    void pay();
     bool accept(int give, int receive); // returns true if it is a good trade, and it wants to trade, false otherwise
     bool accept(int give, std::string receive);
+    bool accept(std::string give, int receive);
     bool accept(std::string give, std::string receive);
-    bool accept(std::string give, std::string receive);
-    ~Computer();
+    
+    void unmortgageTorB(Building *b);
+    void improvements(Building *b);
+    
+    // still needs to be able to buy/sell?
 };
 
 

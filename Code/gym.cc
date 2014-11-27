@@ -6,7 +6,8 @@
 //
 //
 
-#include "gym.cc"
+#include "gym.h"
+#include "player.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -15,16 +16,16 @@ using namespace std;
 
 
 // Constructor
-Gym::Gym(string name, int sqrNum, int numSiblings, int purchaseCost, bool owned, bool mortgaged, Player* owner, string block, bool bothOwned): Building(name, sqrNum, numSiblings, purchaseCost, owned, mortgaged, owner, block), currRent(0), bothOwned(bothOwned){}
+Gym::Gym(string name, int sqrNum, int numSiblings, int purchaseCost, string block): Building(name, sqrNum, numSiblings, purchaseCost, block), currRent(0), bothOwned(false){}
 
 
 
 
 // Get private values
-int Gym::getRent(){
+int Gym::getPay(){
     int roll;
     
-    roll = (rand % 6 + 1) + (rand % 6 + 1);
+    roll = (rand() % 6 + 1) + (rand() % 6 + 1);
     
     if (bothOwned) currRent = 10 * roll; // 10 times the roll if both are owned
     else currRent = 4 * roll; // 4 times the roll if both are owned
@@ -37,7 +38,7 @@ int Gym::getRent(){
 // Change private values
 void::Gym::mortgage(){
     if (!mortgaged){
-        owner->trade(0, getPurchaseCost/2);
+        getOwner()->trade(0, getPurchaseCost()/2);
         mortgaged = true;
         cout << getName() << " has been mortgaged." << endl;
     }
@@ -48,12 +49,12 @@ void::Gym::mortgage(){
 void Gym::pay(Player *p){
     if (!mortgaged){
         if (currRent == 0){
-            int i = getRent();
+            int i = getPay();
         }
         p->trade(currRent, 0);
-        owner->trade(0, currRent);
+        getOwner()->trade(0, currRent);
+        cout << p->getName() << " paid a usage fee of $" << currRent << " to " << getOwner()->getName() << "." << endl;
         currRent = 0;
-        cout << p->getName() << " paid a usage fee of $" << rent[owner->buildingCatalogue["Residence"]] << " to " << owner->getName() << "." << endl;
     }
     else {
         cout << getName() << " is mortgaged. No usage fee is required." << endl;
@@ -62,17 +63,29 @@ void Gym::pay(Player *p){
 
 
 void Gym::purchase(Player* p){
-    if (!owned){
-        owner->trade(purchaseCost, 0);
+    if (!isOwned()){
+        getOwner()->trade(getPurchaseCost(), 0);
         
-        owned = true;
-        owner = p;
+        changeOwner(p, true);
         
-        owner->buildingCatalogue[gym]++; // check?
-        if (p->buildingCatalogue[gym] == numSiblings) bothOwned== true;
+        getOwner()->buildingCatalogue["Gym"]++; // check?
+        if (p->buildingCatalogue["Gym"] == numSiblings) bothOwned = true;
     }
     cout << p->getName() << " bought " << getName() << "." << endl;
 }
 
 
+void Gym::changeOwner(Player *p, bool owned){
+    owner = p;
+    this->owned = owned;
+    if (owner && owner->buildingCatalogue[block] == numSiblings) bothOwned = true;
+    else bothOwned = false;
+}
 
+
+
+
+
+int Gym::getImprovementCost(){ return 0; }
+int Gym::getImprovementLevel() { return 0; }
+void Gym::improve(int numImprovments) { cout << "Error. You cannot add improvements to a Gym." << endl; }

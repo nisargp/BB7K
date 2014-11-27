@@ -12,10 +12,12 @@
 
 #include <string>
 #include <map>
+#include "nonproperty.h"
 
 class Square;
 class RUTRCup;
-
+class Building;
+class TextDisplay;
 
 class Player{
 protected:
@@ -26,15 +28,10 @@ protected:
     Square* currPosition;
     
     int numAssets;
-    Square* property[28];
+    Building* property[28];
     
     RUTRCup * cup [4];
     int numCups;
-    
-    Gameboard * g; 
-
-public:
-    std::map<std::string, int> buildingCatalogue;
     
     int payOut; //amount of money owed for rent/tutition (check if == 0 after every turn)
     
@@ -43,8 +40,16 @@ public:
     bool DCTimsLine;
     int numTurnsDC;
     
+    Gameboard * g;
+    TextDisplay *td;
+
+public:
+    std::map<std::string, int> buildingCatalogue;
     
-    Player(std::string name, char piece, int money, Square* currPosition, int numAssets, Square ** property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy);
+
+    
+    
+    Player(std::string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay* td);
     
     
     // Notifies text display to move piece around the board
@@ -59,7 +64,7 @@ public:
     
     
     // Add methods
-    int addCup(RUTRCUP * cup);
+    void addCup(RUTRCup * cup);
     
     
     // Gameplay
@@ -70,16 +75,25 @@ public:
     void trade(std::string give, std::string receive);
     void declareBankruptcy(Player *p);
     void declareBankruptcy();
+    void printAssets();
     
     // Pure Virtual Methods
-    virtual void buyProperty() = 0; // calls purchase if it wants to buy the property
+    virtual void buyProperty(Building * b) = 0; // calls purchase if it wants to buy the property
+    virtual void payPlayer(Building * b) = 0; // calls pay if the player has enough funds, otherwise they must declare bankruptcy
     virtual void pay() = 0; // calls pay if the player has enough funds, otherwise they must declare bankruptcy
+    virtual bool accept(int give, int receive) = 0; // returns true if it is a good trade, and it wants to trade, false otherwise
+    virtual bool accept(int give, std::string receive) = 0;
+    virtual bool accept(std::string give, int receive) = 0;
+    virtual bool accept(std::string give, std::string receive) = 0;
+    virtual void unmortgageTorB(Building *b) = 0; // Deals with unmortgaging for trading or bankruptcy (for the receiving player)
+    virtual void improvements(Building *b) = 0;
     
     
     virtual ~Player();
     
     
     friend void NonProperty::land(Player* p);
+    friend void helperGetMoney(Player *player, std::string s, bool tuition); // tuition boolean is for whether or not the player is paying tuition (and so can't display assets)
 };
 
 

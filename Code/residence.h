@@ -19,16 +19,19 @@ class Residence: public Building {
     int rent[4];
     
 public:
-    Residence(std::string name, int sqrNum, int numSiblings, int purchaseCost, std::string block, int currRent, bool owned, bool mortgaged, Player* owner, int rent*);
+    Residence(std::string name, int sqrNum, int numSiblings, int purchaseCost, std::string block, int *rent);
     
     // Get private values
-    int getRent(); // check to see if player can afford rent
+    int getPay(); // check to see if player can afford rent
     
     // Change private values
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);
     
+    int getImprovementCost();
+    int getImprovementLevel();
+    void improve(int numImprovments);
 };
 
 

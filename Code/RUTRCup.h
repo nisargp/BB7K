@@ -15,7 +15,7 @@ class RUTRCup{
     RUTRCup();
     
 public:
-    RUTRCup * getCup();
+    static RUTRCup * getCup();
     // destructor subtracts one from the number of cups
     ~RUTRCup();
 };

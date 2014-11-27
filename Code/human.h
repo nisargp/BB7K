@@ -12,12 +12,24 @@
 #include <string>
 #include "player.h"
 
+class RUTRCup;
+
 class Human: public Player{
 public:
-    Human(std::string name, char piece, int money, Square* currPosition, int numAssets, Square ** property, RUTRCUP ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy);
-    void buyProperty(); // calls purchase if it wants to buy the property
-    void pay(); // calls pay if the player has enough funds, otherwise they must declare bankruptcy
-};
+    Human(std::string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay* td);
+    void buyProperty(Building * b); // calls purchase if it wants to buy the property
+    void payPlayer(Building * b); // calls pay if the player has enough funds, otherwise they must declare bankruptcy
+    void pay();
+    bool accept(int give, int receive); // returns true if it is a good trade, and it wants to trade, false otherwise
+    bool accept(int give, std::string receive);
+    bool accept(std::string give, int receive);
+    bool accept(std::string give, std::string receive);
+    void unmortgageTorB(Building *b);
+    void improvements(Building *b);
+    
+    
+    friend void helperGetMoney(Player *player, std::string s, bool tuition);
+    };
 
 
 #endif

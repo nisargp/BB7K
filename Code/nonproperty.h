@@ -13,6 +13,7 @@
 #include <string>
 
 class Player;
+class Gameboard;
 
 class NonProperty: public Square{
     Gameboard *g;

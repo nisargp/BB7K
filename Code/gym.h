@@ -19,15 +19,21 @@ class Gym: public Building {
     int currRent;
     
 public:
-    Gym(std::string name, int sqrNum, int numSiblings, int purchaseCost, int currRent, bool owned, bool mortgaged, Player* owner, std::string block bool bothOwned);
+    Gym(std::string name, int sqrNum, int numSiblings, int purchaseCost, std::string block);
     
     // Get private values
-    int getRent(); // check to see if player can afford rent
+    int getPay(); // check to see if player can afford rent
     
     // Change private values
     void mortgage();
     void purchase(Player* p);
     void pay(Player *p);
+    void changeOwner(Player *p, bool owned);
+    
+    
+    int getImprovementCost();
+    int getImprovementLevel();
+    void improve(int numImprovments);
     
 };
 
