@@ -24,7 +24,7 @@ void NonProperty::land(Player *p){
     
     
     if (getName() == "COLLECT OSAP"){
-        // should we only have give out money when they pass to avoid giving money out twice?
+        // nothung if you land
     }
     
     
@@ -49,7 +49,7 @@ void NonProperty::land(Player *p){
         int payTotalWorth = 0.1 * p->getTotalWorth();
         cout<< "You must pay $300 or $" << payTotalWorth << "in tuition." << endl;
         
-        if (300 >= payTotalWorth){
+        if (300 <= payTotalWorth){
             p->trade(300, 0);
         } else {
             p->trade(payTotalWorth, 0);
@@ -58,7 +58,7 @@ void NonProperty::land(Player *p){
     
     
     else if (getName() == "COOP FEE"){
-        cout << "You must a $150 coop fee." << endl;
+        cout << "You must pay a $150 coop fee." << endl;
         p->trade(150, 0);
     }
     

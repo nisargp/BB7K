@@ -6,6 +6,7 @@
 //
 //
 
+#include "human.h"
 #include "player.h"
 #include "square.h"
 #include "gameboard.h"
@@ -15,19 +16,21 @@
 #include "gym.h"
 #include "RUTRCup.h"
 #include "textdisplay.h"
-#include "human.h"
 #include <iostream>
 
 using namespace std;
 
-Human::Human(string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay* td)
-: Player(name, piece, money, currPosition, numAssets, property, cup, numCups, DCTimsLine, numTurnsDC, payOut, bankruptcy, td){}
+Human::Human(string name, char piece, TextDisplay* td, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy)
+: Player(name, piece, td, money, currPosition, numAssets, property, cup, numCups, DCTimsLine, numTurnsDC, payOut, bankruptcy){}
 
 
-void helperGetMoney(Player* player, string s, bool tuition){
+void helperGetMoney(Player* player, string s, bool tuition, bool pay){
     
     // Mortgage to get more money
-    if (s == "mortgage"){
+    if(s == "bankrupt"){
+        
+    }
+    else if(s == "mortgage"){
         cin >> s;
         for (int i = 0; i < player->numAssets; i++){
             if (player->property[i]->getName() == s) {
@@ -226,7 +229,7 @@ void Human::buyProperty(Building * b){
                 return;
             }
             
-            helperGetMoney(this, s, false);
+            helperGetMoney(this, s, false, false);
             
         }
         
@@ -250,7 +253,7 @@ void Human::payPlayer(Building * b){
         }
         cout<< "Would you like to do? (Mortgage, remove improvements or trade assets.)" << endl;
         cin >> s;
-        helperGetMoney(this, s, true);
+        helperGetMoney(this, s, true, true);
     }
     
     b->pay(this);
@@ -274,7 +277,7 @@ void Human::pay(){
         cout<< "Would you like to do? (Mortgage, remove improvements or trade assets.)" << endl;
         cin >> s;
         
-        helperGetMoney(this, s, false);
+        helperGetMoney(this, s, false, true);
     }
     
     trade(payOut, 0);
@@ -335,7 +338,7 @@ void Human::unmortgageTorB(Building *b){
 }
 
 
-void improvements(Building *b){
+void Human::improvements(Building *b){
     cout << "You now own the entire " << b->getBlock() << " block, so you can now add improvements." << endl;
 }
 

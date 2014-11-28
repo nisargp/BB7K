@@ -21,7 +21,7 @@
 using namespace std;
 
 // Constructor
-Player::Player(string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay *td)
+Player::Player(string name, char piece, TextDisplay *td, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy)
 : name(name), piece (piece), money (money), currPosition(currPosition), numAssets(numAssets), numCups(numCups), DCTimsLine(DCTimsLine), numTurnsDC(numTurnsDC), payOut(payOut), bankruptcy(bankruptcy), td(td){
     
     for (int i = 0; i < numAssets; i++){
@@ -34,6 +34,7 @@ Player::Player(string name, char piece, int money, Square* currPosition, int num
     }
     
     g = Gameboard::getInstance();
+    if (!currPosition) = getSquare(0); // Set currPosition to Collect OSAP square if currPosition is NULL
     g->addPlayer(this);
     
 }
@@ -53,7 +54,7 @@ int Player::getTotalWorth(){
         totalWorth+= property[i]->getPurchaseCost(); // + cost of properties
         
         Academic * prop = dynamic_cast<Academic*>(property[i]);
-        if (prop){ // which library for dynamic casting?
+        if (prop){
             totalWorth += (prop->getImprovementLevel() * prop->getImprovementCost()); // + improvements
         }
     }

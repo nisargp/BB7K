@@ -22,8 +22,8 @@
 
 using namespace std;
 
-Computer::Computer(string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay* td)
-: Player(name, piece, money, currPosition, numAssets, property, cup, numCups, DCTimsLine, numTurnsDC, payOut, bankruptcy, td){}
+Computer::Computer(string name, char piece, TextDisplay* td, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy)
+: Player(name, piece, td, money, currPosition, numAssets, property, cup, numCups, DCTimsLine, numTurnsDC, payOut, bankruptcy){}
 
 
 void Computer::buyProperty(Building * b){

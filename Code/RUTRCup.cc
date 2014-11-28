@@ -8,14 +8,16 @@
 
 #include "RUTRCup.h"
 
-RUTRCup::RUTRCup(){ cupCount++; }
+int RUTRCup::cupCount = 0;
+
+RUTRCup::RUTRCup(){ RUTRCup::cupCount++; }
 
 RUTRCup* RUTRCup::getCup(){
-    if (cupCount == 4) return 0;
+    if (RUTRCup::cupCount == 4) return 0;
     else {
         RUTRCup * cup = new RUTRCup;
         return cup;
     }
 }
 
-RUTRCup::~RUTRCup(){ cupCount--; }
+RUTRCup::~RUTRCup(){ RUTRCup::cupCount--; }

@@ -49,7 +49,7 @@ public:
 
     
     
-    Player(std::string name, char piece, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy, TextDisplay* td);
+    Player(std::string name, char piece, TextDisplay* td, int money = 1500, Square* currPosition = 0, int numAssets = 0, Building ** property = 0, RUTRCup ** cup = 0, int numCups = 0, bool DCTimsLine = false, int numTurnsDC = 0,int payOut = 0, bool bankruptcy = false);
     
     
     // Notifies text display to move piece around the board
@@ -93,7 +93,7 @@ public:
     
     
     friend void NonProperty::land(Player* p);
-    friend void helperGetMoney(Player *player, std::string s, bool tuition); // tuition boolean is for whether or not the player is paying tuition (and so can't display assets)
+    friend void helperGetMoney(Player *player, std::string s, bool tuition, bool play); // tuition boolean is for whether or not the player is paying tuition (and so can't display assets)
 };
 
 

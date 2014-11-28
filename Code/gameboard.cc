@@ -244,7 +244,8 @@ void Gameboard::removePlayer(Player *p){
             else this->p[i] = NULL;
         }
     }
-} // make sure that player gets deleted. Here or elsewhere?
+    delete p;
+}
 
 
 
@@ -261,6 +262,7 @@ Gameboard::~Gameboard(){
     for (int i = 0; i < 40; i++){
         delete theBoard[i];
     }
+    
 }
 
 
