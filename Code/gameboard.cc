@@ -225,6 +225,10 @@ Player* Gameboard::getPlayer(string name){
 
 
 
+Player* Gameboard::getPlayer(int position) {
+    return this->p[num - 1];
+}
+
 
 // Change values
 void Gameboard::addPlayer(Player *p){

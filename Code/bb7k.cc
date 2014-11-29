@@ -124,9 +124,17 @@ void gameplay(Gameboard &gb, bool rolltest) {
                 cin >> die1 >> die2;
             }
             roll(die1, die2);
+            roll = true;
         }
         else if (cmd == "next") {
             
+            if (roll) {
+                roll = false;
+                player++;
+                if (player > 6) player -= 6;
+                currPlayer = gb.getPlayer(player);
+            }
+            else cout << "Current Player has not rolled yet!" << endl;
         }
         else if (cmd == "trade") {
             string name;

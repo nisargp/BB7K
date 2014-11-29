@@ -52,6 +52,7 @@ public:
     Square* getSquare(std::string name);
     int getNumSiblings(std::string block);
     Player* getPlayer(std::string name);
+    Player* getPlayer(int position);
     
     // Change values
     void addPlayer(Player *p);
