@@ -10,8 +10,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
 #include "gameboard.h"
-#include
 
 using namespace std;
 
@@ -64,13 +64,13 @@ void addplayers(Gameboard &gb) {
     cout << "Please enter number of players: ";
     cin >> numPlayers;
     for (int i = 0; i < numPlayers; i++) {
-        cout << endl << "Please enter name of Player " << (i + 1) << ": "
+        cout << "Please enter name of Player " << (i + 1) << ": ";
         cin >> name;
-        cout << endl << "Please enter type of player (human or computer): ";
+        cout << "Please enter type of player (human or computer): ";
         cin >> typePlayer;
+        int max = 8 - i;
         if (typePlayer == "human") {
-            cout << endl << "Please select a piece from the following (";
-            int max = 8 - i;
+            cout << "Please select a piece from the following (";
             for (int k = 0; k < max; k++) {
                 cout << pieces[k] << " ";
             }
@@ -80,46 +80,106 @@ void addplayers(Gameboard &gb) {
         else {
             piece = pieces[0];
         }
-        for (int l = 0, j = 0; l < 8; l++, j++) {
-            if (piece == pieces[i]) {
+        for (int l = 0, j = 0; l < max; l++, j++) {
+            if (piece == pieces[l]) {
                 j++;
             }
             pieces[l] = pieces[j];
         }
-        pieces[8] = '\0';
+        pieces[max - 1] = '\0';
         if (typePlayer == "human") {
             cout << "Human added" << endl;
-           // Human newPlayer = new Human(name, piece, gb.td);
+            //Human *newPlayer = new Human(name, piece, gb.td);
+            //gb.addplayer(newPlayer);
         }
         else {
-            cout << "Human added" << endl;
-            //Computer newPlayer = new Computer(name, piece, gb.td);
+            cout << "Computer added" << endl;
+            //Computer *newPlayer = new Computer(name, piece, gb.td);
+            //gb.addplayer(newPlayer);
         }
     }
 }
 
+int roll(int die1 = 0, int die2 = 0) {
+    int move;
+    if (die1 == 0 && die2 == 0) {
+        die1 = rand() % 6 + 1;
+        die2 = rand() % 6 + 1;
+    }
+    cout << "Die 1: " << die1 << " Die 2: " << die2 << endl;
+    move = die1 + die2;
+    return move;
+}
 
-void gameplay(Gameboard &gb) {
+void gameplay(Gameboard &gb, bool rolltest) {
+    string command;
+    Player *currPlayer;
+    int player;
+    
+    while (cin >> command) {
+        if (cmd == "roll") {
+            int die1 = 0;
+            int die2 = 0;
+            if (rolltest) {
+                cin >> die1 >> die2;
+            }
+            roll(die1, die2);
+        }
+        else if (cmd == "next") {
+            
+        }
+        else if (cmd == "trade") {
+            string name;
+        }
+        else if (cmd == "improve") {
+            
+        }
+        else if (cmd == "mortgage") {
+            
+        }
+        else if (cmd == "unmortgage") {
+            
+        }
+        else if (cmd == "bankrupt") {
+            
+        }
+        else if (cmd == "assets") {
+            assets(currPlayer);
+        }
+        else if (cmd == "save") {
+            string filename;
+            cin >> filename;
+            save(gb, filename);
+        }
+    }
     
 }
+void assets(Player *p) {
+    cout << "Print assets of Player" << endl;
+}
+void save(Gameboard &gb, string filename) {
+    cout << "Saving file" << endl;
+}
 
-int main(int args, char **argv) {
+int main(int args, char *argv[]) {
+    srand((unsigned)time(0));
     bool rolltest = false;
     Gameboard *gb = NULL; //new Gameboard();
-    addplayers(&gb);
+    addplayers(*gb);
+    gameplay(gb, rolltest);
     if (args > 1) {
         for (int i = 1; i < args; i++) {
-            if (argv[i] == "-testing") {
+            if (strcmp(argv[i], "-testing") == 0) {
                 rolltest = true;
             }
-            else if (argv[i] == "-load") {
+            else if (strcmp(argv[i], "-load") == 0) {
                 i++;
                 string filename = argv[i];
-                delete gb;
-                gb = new Gameboard();
-                load(filename, &gb);
+                //delete gb;
+                //gb = new Gameboard();
+                //load(filename, *gb);
             }
         }
     }
-    cout << "END of main";
+    cout << "END of main" << endl;
 }
