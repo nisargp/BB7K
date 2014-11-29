@@ -112,9 +112,10 @@ int roll(int die1 = 0, int die2 = 0) {
 }
 
 void gameplay(Gameboard &gb, bool rolltest) {
+    bool roll;
     string command;
     Player *currPlayer;
-    int player;
+    int player = 0;
     
     while (cin >> command) {
         if (cmd == "roll") {
@@ -127,7 +128,6 @@ void gameplay(Gameboard &gb, bool rolltest) {
             roll = true;
         }
         else if (cmd == "next") {
-            
             if (roll) {
                 roll = false;
                 player++;
