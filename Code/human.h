@@ -28,7 +28,7 @@ public:
     void improvements(Building *b);
     
     
-    friend void helperGetMoney(Player *player, std::string s, bool tuition, bool pay);
+    friend void helperGetMoney(Player *player, std::string s, bool tuition);
     };
 
 

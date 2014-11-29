@@ -52,7 +52,11 @@ public:
     Square* getSquare(std::string name);
     int getNumSiblings(std::string block);
     Player* getPlayer(std::string name);
+<<<<<<< Updated upstream
     Player* getPlayer(int position);
+=======
+    int getNumPlayers();
+>>>>>>> Stashed changes
     
     // Change values
     void addPlayer(Player *p);

@@ -24,13 +24,10 @@ Human::Human(string name, char piece, TextDisplay* td, int money, Square* currPo
 : Player(name, piece, td, money, currPosition, numAssets, property, cup, numCups, DCTimsLine, numTurnsDC, payOut, bankruptcy){}
 
 
-void helperGetMoney(Player* player, string s, bool tuition, bool pay){
+void helperGetMoney(Player* player, string s, bool tuition){
     
     // Mortgage to get more money
-    if(s == "bankrupt"){
-        
-    }
-    else if(s == "mortgage"){
+    if(s == "mortgage"){
         cin >> s;
         for (int i = 0; i < player->numAssets; i++){
             if (player->property[i]->getName() == s) {
@@ -54,9 +51,7 @@ void helperGetMoney(Player* player, string s, bool tuition, bool pay){
         else {
             for (int i = 0; i < player->numAssets; i++){
                 if (player->property[i]->getName() == s) {
-                    Academic * prop= dynamic_cast<Academic*>(player->property[i]);
-                    if (prop) prop->improve(-1);
-                    else cout << "Error. This must be an academic building." << endl;
+                    player->property[i]->improve(-1);
                     break;
                 }
             }
@@ -221,7 +216,8 @@ void Human::buyProperty(Building * b){
     // If they want to purchase the property
     if (s == "Y"){
         while (b->getPurchaseCost() > money){
-            cout << "You don't have enough money to purchase " << b->getName() << ". You need $" << b->getPurchaseCost() - money << ". What would you like to do? (Enter 'C' to cancel, or you can mortgage properties, remove improvements, or trade assets to get the necessary money.)" << endl;
+            cout << "You don't have enough money to purchase " << b->getName() << ". You need $" << b->getPurchaseCost() - money << ". What would you like to do? (Enter 'C' to cancel, or you can mortgage properties, remove improvements, or trade assets to get the necessary money. Enter 'assets' to view your list of properties.)" << endl;
+            
             cin>>s;
             
             if (s == "C") {
@@ -229,10 +225,9 @@ void Human::buyProperty(Building * b){
                 return;
             }
             
-            helperGetMoney(this, s, false, false);
+            helperGetMoney(this, s, false);
             
         }
-        
         b->purchase(this);
     }
     else cout << name << " has decided not to purchase " << b->getName() << endl;
@@ -244,16 +239,14 @@ void Human::payPlayer(Building * b){
     while (payOut > money){
         bankruptcy = true;
         cout << "You owe $" << payOut << " but you only have $" << money << "." << endl;
-        cout << "Would you like to delcare bankruptcy? (Y/N)" << endl;
+        cout<< "What would you like to do? (Declare bankruptcy, mortgage, remove improvements or trade assets.)" << endl;
         string s;
         cin >> s;
-        if (s == "Y") {
+        if (s == "bankrupt") {
             declareBankruptcy(b->getOwner());
             return;
         }
-        cout<< "Would you like to do? (Mortgage, remove improvements or trade assets.)" << endl;
-        cin >> s;
-        helperGetMoney(this, s, true, true);
+        helperGetMoney(this, s, true);
     }
     
     b->pay(this);
@@ -267,21 +260,19 @@ void Human::pay(){
     while (payOut > money){
         bankruptcy = true;
         cout << "You owe $" << payOut << " but you only have $" << money << "." << endl;
-        cout << "Would you like to delcare bankruptcy? (Y/N)" << endl;
+        cout<< "What would you like to do? (Declare bankruptcy, print your assets, mortgage, remove improvements or trade assets.)" << endl;
         string s;
         cin >> s;
-        if (s == "Y") {
+        if (s == "bankrupt") {
             declareBankruptcy();
             return;
         }
-        cout<< "Would you like to do? (Mortgage, remove improvements or trade assets.)" << endl;
-        cin >> s;
-        
-        helperGetMoney(this, s, false, true);
+        helperGetMoney(this, s, false);
     }
     
     trade(payOut, 0);
     
+    cout<< "You have paid $" << payOut<< "." << endl;
 }
 
 
@@ -339,7 +330,7 @@ void Human::unmortgageTorB(Building *b){
 
 
 void Human::improvements(Building *b){
-    cout << "You now own the entire " << b->getBlock() << " block, so you can now add improvements." << endl;
+    cout << "You now own the entire " << b->getBlock() << " block, so you can add improvements." << endl;
 }
 
 

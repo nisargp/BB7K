@@ -38,7 +38,7 @@ public:
     
     // Change values of protected fields
     void unmortgage();
-    virtual void changeOwner(Player *p, bool owned = true); // When assets are traded
+    virtual void changeOwner(Player *p, bool owned = true); // When assets are traded, owned = false means the property is being returned to the bank
     
     // Method for each time you land on a square (check to purchase)
     void land(Player *p);

@@ -223,7 +223,9 @@ Player* Gameboard::getPlayer(string name){
     return NULL;
 }
 
-
+int Gameboard::getNumPlayers() {
+    return numPlayers;
+}
 
 Player* Gameboard::getPlayer(int position) {
     return this->p[num - 1];
@@ -265,6 +267,9 @@ Gameboard::~Gameboard(){
     delete td;
     for (int i = 0; i < 40; i++){
         delete theBoard[i];
+    }
+    for (int i = 0; i < numPlayers; i++){
+        delete p[i];
     }
     
 }

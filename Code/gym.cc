@@ -16,7 +16,7 @@ using namespace std;
 
 
 // Constructor
-Gym::Gym(string name, int sqrNum, int numSiblings, int purchaseCost, string block): Building(name, sqrNum, numSiblings, purchaseCost, block), currRent(0), bothOwned(false){}
+Gym::Gym(string name, int sqrNum, int numSiblings, int purchaseCost, string block): Building(name, sqrNum, numSiblings, purchaseCost, block), bothOwned(false), currRent(0){}
 
 
 

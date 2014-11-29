@@ -63,7 +63,7 @@ void Academic::mortgage(){
             cout<< "Would you like to continue? (Y/N)" << endl;
         }
         
-        if (s == "N" || s == "n") return;
+        if (s == "N") return;
         
         while(improvementLevel != 0){
             improve(-1);

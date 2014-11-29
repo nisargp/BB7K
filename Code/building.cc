@@ -16,7 +16,7 @@ using namespace std;
 
 // Constructor
 Building::Building(string name, int sqrNum, int numSiblings, int purchaseCost, string block)
-        : Square(name, sqrNum), numSiblings(numSiblings), purchaseCost(purchaseCost), owned(false), mortgaged(false), owner(NULL), block(block){}
+        : Square(name, sqrNum), purchaseCost(purchaseCost), numSiblings(numSiblings), mortgaged(false), block(block), owned(false), owner(NULL){}
 
 
 
@@ -29,7 +29,6 @@ bool Building::isOwned(){ return owned; }
 
 bool Building::isMortgaged() { return mortgaged; }
 
-
 Player* Building::getOwner() { return owner; }
 
 
@@ -37,9 +36,12 @@ Player* Building::getOwner() { return owner; }
 // Change protected values
 void Building::unmortgage(){
     if (mortgaged) {
-        owner->trade((purchaseCost / 2) * 110, 0);
-        mortgaged = false;
-        cout << "You have unmortgaged " << getName() << "." << endl;
+        if ((purchaseCost/2) * 110 <= owner->getMoney()){
+            owner->trade((purchaseCost / 2) * 110, 0);
+            mortgaged = false;
+            cout << "You have unmortgaged " << getName() << "." << endl;
+        }
+        else cout << "You don't have enough money to unmortgage." << endl;
     }
     else {
         cout << getName() << " must be mortgaged before unmortgaging." << endl;
@@ -57,7 +59,7 @@ void Building::changeOwner(Player *p, bool owned) { // owned = false means the p
 
 // Method for each time you land on a square
 void Building::land(Player *p){
-    cout<<"You have landed on: " << getName() << "." << endl;
+    cout << "You have landed on: " << getName() << "." << endl;
     
     if (owned) {
         if(owner != p) p->payPlayer(this);

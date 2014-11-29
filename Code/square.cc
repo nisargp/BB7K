@@ -19,4 +19,5 @@ int Square::getSquareNum(){ return sqrNum; }
 // Returns the name of the square
 string Square::getName(){ return name; }
 
+//Destructor
 Square::~Square(){}

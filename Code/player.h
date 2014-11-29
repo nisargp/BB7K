@@ -23,6 +23,7 @@ class Player{
 protected:
     std::string name;
     char piece;
+    TextDisplay *td;
     int money;
     
     Square* currPosition;
@@ -38,18 +39,15 @@ protected:
     bool bankruptcy; // update if player can decalre bankruptcy
     
     bool DCTimsLine;
-    int numTurnsDC;
     
+    int numTurnsDC;
     Gameboard * g;
-    TextDisplay *td;
-
+    
 public:
     std::map<std::string, int> buildingCatalogue;
     
-
     
-    
-    Player(std::string name, char piece, TextDisplay* td, int money = 1500, Square* currPosition = 0, int numAssets = 0, Building ** property = 0, RUTRCup ** cup = 0, int numCups = 0, bool DCTimsLine = false, int numTurnsDC = 0,int payOut = 0, bool bankruptcy = false);
+    Player(std::string name, char piece, TextDisplay* td, int money = 1500, Square* currPosition = 0, int numAssets = 0, Building ** property = 0, RUTRCup ** cup = 0, int numCups = 0, int payOut = 0, bool bankruptcy = false, bool DCTimsLine = false, int numTurnsDC = 0);
     
     
     // Notifies text display to move piece around the board
@@ -93,7 +91,11 @@ public:
     
     
     friend void NonProperty::land(Player* p);
-    friend void helperGetMoney(Player *player, std::string s, bool tuition, bool play); // tuition boolean is for whether or not the player is paying tuition (and so can't display assets)
+    friend void helperGetMoney(Player *player, std::string s, bool tuition); // tuition boolean is for whether or not the player is paying tuition (and so can't display assets)
+    friend void trade(Player* player);
+    friend void improve(Player* player);
+    friend void gameplay(Gameboard &gb, bool rolltest);
+    
 };
 
 

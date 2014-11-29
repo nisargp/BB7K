@@ -12,6 +12,15 @@
 #include <sstream>
 #include <cstdlib>
 #include "gameboard.h"
+#include "player.h"
+#include "square.h"
+#include "computer.h"
+#include "building.h"
+#include "academic.h"
+#include "residence.h"
+#include "gym.h"
+#include "RUTRCup.h"
+#include "textdisplay.h"
 
 using namespace std;
 
@@ -100,29 +109,208 @@ void addplayers(Gameboard &gb) {
     }
 }
 
-int roll(int die1 = 0, int die2 = 0) {
+int roll(int die1 = 0, int die2 = 0, bool &doubles) {
     int move;
     if (die1 == 0 && die2 == 0) {
         die1 = rand() % 6 + 1;
         die2 = rand() % 6 + 1;
     }
+    if (die1 == die2) doubles = true;
     cout << "Die 1: " << die1 << " Die 2: " << die2 << endl;
     move = die1 + die2;
     return move;
 }
 
+
+void trade(Player* player){
+    string s;
+    cin>> s;
+    Player* p = player->g->getPlayer(s); // get a pointer to the player to play with
+    int gi, ri; // give, receive (integers)
+    string gs, rs; // give, receive (strings)
+    
+    if (cin >> gi){
+        if (cin >> ri){
+            //
+            // Give - integer, Receive - integer trade
+            //
+            cout << player->getName() << " has offered a trade of $" << gi << "for $" << ri << " to " << p->getName() << endl;
+            
+            // Check to see if player that is being offered wants to trade
+            if(p->accept(gi, ri)){
+                player->trade(gi, ri);
+                p->trade(ri, gi);
+                cout << player->getName() << " has traded " << gi << "for $" << ri << " with " << p->getName() << endl;
+            }
+            else cout << "Your trade has been denied." << endl;
+            
+        } else {
+            //
+            // Give - integer, Receive - string trade
+            //
+            cin.clear(); // clears fail bit
+            cin >> rs;
+            Building *receive = dynamic_cast<Building*>(player->g->getSquare(rs)); // finds pointer to appropriate building
+            
+            bool canTrade = true; // no other buildings on a block have improvements
+            
+            // Checks to see if owner has entire set (of academic buildings), and thus could have added improvements
+            if (dynamic_cast<Academic*>(receive) && p->buildingCatalogue[receive->getBlock()] == player->g->getNumSiblings(rs)){
+                
+                // Goes through list of player's assets to check if any of them on the same block have improvements
+                for (int i = 0; i < player->numAssets; i++){
+                    
+                    if (p->property[i]->getBlock() == receive->getBlock()){ // same block
+                        if (p->property[i]->getImprovementLevel() != 0){
+                            cout << "You cannot trade for this property. " << p->getName() << " must sell improvements on the entire block (specifically  " << player->property[i]->getName() << ") before trading." << endl;
+                            canTrade = false;
+                            break;
+                        }
+                    }
+                }
+            } // end of check for improvements
+            
+            // If you can still trade:
+            if (canTrade){
+                cout << player->getName() << " has offered a trade of $" << gi << "for " << rs << " to " << p->getName() << endl;
+                if(p->accept(gi, rs)){
+                    player->trade(gi, rs);
+                    p->trade(rs, gi);
+                    cout << player->getName() << " has traded " << gi << "for $" << rs << " with " << p->getName() << endl;
+                }
+                else cout << "Your trade has been denied." << endl;
+                
+            }
+        } // end of else
+    } else {
+        
+        // Give - string
+        cin.clear(); // clears fail bit
+        cin >> gs;
+        Building *give = dynamic_cast<Building*> (player->g->getSquare(gs)); // finds pointer to appropriate building
+        
+        bool canTrade = true;// no other buildings on a block have improvements
+        
+        // Checks to see if owner has entire set (of academic buildings), and thus could have added improvements
+        if (dynamic_cast<Academic*>(give) && give->getOwner()->buildingCatalogue[give->getBlock()] == player->g->getNumSiblings(gs)){
+            
+            // Goes through list of player's assets to check if any of them on the same block have improvements
+            for (int i = 0; i < player->numAssets; i++){
+                
+                if (player->property[i]->getBlock() == give->getBlock()){ // same block
+                    if (player->property[i]->getImprovementLevel() != 0){
+                        cout << "You must sell improvements on the entire block (specifically  " << player->property[i]->getName() << ") before trading." << endl;
+                        cin.ignore(); // ignore the next value (ie. the receive value) - doesn't matter, can't do the trade
+                        canTrade = false;
+                        break;
+                    }
+                }
+            }
+        }// end of check for improvements
+        
+        // If you can still trade:
+        if (canTrade){
+            
+            // Checks value of receive
+            if (cin >> ri){
+                
+                //
+                // Give - string, Receive - integer trade
+                //
+                cout << player->getName() << " has offered a trade of " << gs << "for $" << ri << " to " << p->getName() << endl;
+                if(p->accept(gs, ri)){
+                    player->trade(gs, ri);
+                    p->trade(ri, gs);
+                    cout << player->getName() << " has traded " << gs << "for $" << ri << " with " << p->getName() << endl;
+                }
+                else cout << "Your trade has been denied." << endl;
+            }
+            else {
+                
+                //
+                // Give - string, Receive - string trade
+                //
+                
+                cin.clear(); // clears fail bit
+                
+                cin >> rs;
+                Building *receive = dynamic_cast<Building*>(player->g->getSquare(rs)); // finds pointer to appropriate building
+                
+                bool canTrade = true;// no other buildings on a block have improvements
+                
+                // Checks to see if owner has entire set (of academic buildings), and thus could have added improvements
+                if (dynamic_cast<Academic*>(receive) && receive->getOwner()->buildingCatalogue[receive->getBlock()] == player->g->getNumSiblings(rs)){
+                    
+                    // Goes through list of player's assets to check if any of them on the same block have improvements
+                    for (int i = 0; i < player->numAssets; i++){
+                        
+                        if (player->property[i]->getBlock() == receive->getBlock()){ // same block
+                            if (player->property[i]->getImprovementLevel() != 0){
+                                cout << "You cannot trade for this property. " << receive->getOwner() << " must sell improvements on the entire block (specifically  " << player->property[i]->getName() << ") before trading." << endl;
+                                canTrade = false;
+                                break;
+                            }
+                        }
+                        
+                    }
+                }
+                
+                if (canTrade){
+                    cout << player->getName() << " has offered a trade of $" << gs << "for " << rs << " to " << p->getName() << endl;
+                    if(p->accept(gs, rs)){
+                        player->trade(gs, rs);
+                        p->trade(rs, gs);
+                        cout << player->getName() << " has traded " << gs << "for $" << rs << " with " << p->getName() << endl;
+                    }
+                    else cout << "Your trade has been denied." << endl;
+                    
+                }
+            }
+        }
+    }
+    
+}
+
+void improve(Player* player) {
+    string s;
+    cin >> s;
+    string s1;
+    cin >> s1;
+    
+    int i;
+    
+    if (s1 == "sell") i = -1;
+    else i = 1;
+        
+    for (int i = 0; i < player->numAssets; i++){
+        if (player->property[i]->getName() == s) {
+            player->property[i]->improve(i);
+            break;
+        }
+    }
+}
+
+void save(Gameboard &gb, string filename) {
+    cout << "Saving file" << endl;
+}
+
 void gameplay(Gameboard &gb, bool rolltest) {
-    string command;
-    Player *currPlayer;
+    bool doubles = false;
+    int numDoubles = 0;
+    bool roll = false;
+    string cmd;
+    Player *currPlayer = NULL;
     int player;
     
-    while (cin >> command) {
+    while (cin >> cmd) {
         if (cmd == "roll") {
             int die1 = 0;
             int die2 = 0;
+            int move = 0;
             if (rolltest) {
                 cin >> die1 >> die2;
             }
+<<<<<<< Updated upstream
             roll(die1, die2);
             roll = true;
         }
@@ -132,27 +320,60 @@ void gameplay(Gameboard &gb, bool rolltest) {
                 roll = false;
                 player++;
                 if (player > 6) player -= 6;
+=======
+            move = roll(die1, die2, doubles);
+            currPlayer->roll(move);
+            while (numDoubles < 3 && doubles) {
+                numDoubles++;
+                doubles = false;
+                move = roll(die1, die2, doubles);
+                currPlayer->roll(move);
+            }
+            roll = true;
+        }
+        else if (cmd == "next") {
+            if (roll) {
+                roll = false;
+                player++;
+                int numPlayers = gb.getNumPlayers();
+                if (player > numPlayers) player -= numPlayers;
+>>>>>>> Stashed changes
                 currPlayer = gb.getPlayer(player);
             }
             else cout << "Current Player has not rolled yet!" << endl;
         }
         else if (cmd == "trade") {
-            string name;
+            trade(currPlayer);
         }
         else if (cmd == "improve") {
-            
+            improve(currPlayer);
         }
         else if (cmd == "mortgage") {
-            
+            string s;
+            cin >> s;
+            for (int i = 0; i < currPlayer->numAssets; i++){
+                if (currPlayer->property[i]->getName() == s) {
+                    currPlayer->property[i]->mortgage();
+                    break;
+                }
+            }
         }
         else if (cmd == "unmortgage") {
-            
+            string s;
+            cin >> s;
+            for (int i = 0; i < currPlayer->numAssets; i++){
+                if (currPlayer->property[i]->getName() == s) {
+                    currPlayer->property[i]->unmortgage();
+                    break;
+                }
+            }
         }
         else if (cmd == "bankrupt") {
-            
+            // should we do anything here?
+            cout << "You can't declare bankruptcy at this time." << endl;
         }
         else if (cmd == "assets") {
-            assets(currPlayer);
+            currPlayer->printAssets();
         }
         else if (cmd == "save") {
             string filename;
@@ -162,19 +383,14 @@ void gameplay(Gameboard &gb, bool rolltest) {
     }
     
 }
-void assets(Player *p) {
-    cout << "Print assets of Player" << endl;
-}
-void save(Gameboard &gb, string filename) {
-    cout << "Saving file" << endl;
-}
+
 
 int main(int args, char *argv[]) {
     srand((unsigned)time(0));
     bool rolltest = false;
     Gameboard *gb = NULL; //new Gameboard();
     addplayers(*gb);
-    gameplay(gb, rolltest);
+    gameplay(*gb, rolltest);
     if (args > 1) {
         for (int i = 1; i < args; i++) {
             if (strcmp(argv[i], "-testing") == 0) {

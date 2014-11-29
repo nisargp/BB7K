@@ -176,7 +176,6 @@ void NonProperty::land(Player *p){
     
     else if (getName().substr(0, 12) == "NEEDLES HALL"){
         int randNum = rand() % 100 + 1;
-        
         if (randNum == 1){
             RUTRCup * cup = RUTRCup::getCup();
             if(!cup){

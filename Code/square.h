@@ -14,8 +14,8 @@
 class Player;
 
 class Square{
-    int sqrNum; // number in the array for the gameboard
     std::string name;
+    int sqrNum; // number in the array for the gameboard
     
 public:
     Square(std::string name, int sqrNum);

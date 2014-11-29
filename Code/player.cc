@@ -21,8 +21,8 @@
 using namespace std;
 
 // Constructor
-Player::Player(string name, char piece, TextDisplay *td, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, bool DCTimsLine, int numTurnsDC, int payOut, bool bankruptcy)
-: name(name), piece (piece), money (money), currPosition(currPosition), numAssets(numAssets), numCups(numCups), DCTimsLine(DCTimsLine), numTurnsDC(numTurnsDC), payOut(payOut), bankruptcy(bankruptcy), td(td){
+Player::Player(string name, char piece, TextDisplay *td, int money, Square* currPosition, int numAssets, Building ** property, RUTRCup ** cup, int numCups, int payOut, bool bankruptcy, bool DCTimsLine, int numTurnsDC)
+: name(name), piece (piece), td(td), money(money), currPosition(currPosition), numAssets(numAssets), numCups(numCups), payOut(payOut), bankruptcy(bankruptcy), DCTimsLine(DCTimsLine), numTurnsDC(numTurnsDC) {
     
     for (int i = 0; i < numAssets; i++){
         this->property[i] = property[i];
@@ -34,7 +34,7 @@ Player::Player(string name, char piece, TextDisplay *td, int money, Square* curr
     }
     
     g = Gameboard::getInstance();
-    if (!currPosition) = getSquare(0); // Set currPosition to Collect OSAP square if currPosition is NULL
+    if (!currPosition) currPosition = g->getSquare(0); // Set currPosition to Collect OSAP square if currPosition is NULL
     g->addPlayer(this);
     
 }
@@ -140,6 +140,7 @@ void Player::trade(int give, string receive){ // before calling, you must alread
     // See if they need to unmortgage property
     if (property[numAssets-1]->isMortgaged()){
         unmortgageTorB(property[numAssets-1]);
+        if (!this) return; // if a player declares bankruptcy because they can't pay to unmortgage the property
     }
     
     if(buildingCatalogue[r->getBlock()] == g->getNumSiblings (r->getBlock())) improvements(property[numAssets-1]);
@@ -178,6 +179,7 @@ void Player::trade(string give, string receive){
     // See if they need to unmortgage property
     if (property[numAssets-1]->isMortgaged()){
         unmortgageTorB(property[numAssets-1]);
+        if (!this) return; // if a player declares bankruptcy because they can't pay to unmortgage the property
     }
     
     if(buildingCatalogue[r->getBlock()] == g->getNumSiblings (r->getBlock())) improvements(property[numAssets-1]);
@@ -199,6 +201,7 @@ void Player::declareBankruptcy(Player *p){
         
         if (property[i]->isMortgaged()){
             unmortgageTorB(property[i]);
+            if (!p) break; // if a player declares bankruptcy because they can't pay to unmortgage the property
         }
         
         if(buildingCatalogue[property[i]->getBlock()] == g->getNumSiblings (property[i]->getBlock())) improvements(property[i]);
@@ -241,7 +244,7 @@ void Player::printAssets(){
         string mortgaged;
         if (property[i]->isMortgaged()) mortgaged = "Mortgaged";
         else mortgaged = "Unmortgaged";
-        cout<< property[i]->getName() << ": " << mortgaged << " Purchase Cost - $" << property[i]->getPurchaseCost() << endl;
+        cout<< property[i]->getName() << ": " << mortgaged << ", Purchase Cost - $" << property[i]->getPurchaseCost() << endl;
     }
 }
 
