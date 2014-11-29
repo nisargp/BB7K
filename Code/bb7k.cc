@@ -295,12 +295,19 @@ void save(Gameboard &gb, string filename) {
 }
 
 void gameplay(Gameboard &gb, bool rolltest) {
+<<<<<<< HEAD
     bool doubles = false;
     int numDoubles = 0;
     bool roll = false;
     string cmd;
     Player *currPlayer = NULL;
     int player;
+=======
+    bool roll;
+    string command;
+    Player *currPlayer;
+    int player = 0;
+>>>>>>> FETCH_HEAD
     
     while (cin >> cmd) {
         if (cmd == "roll") {
@@ -315,7 +322,6 @@ void gameplay(Gameboard &gb, bool rolltest) {
             roll = true;
         }
         else if (cmd == "next") {
-            
             if (roll) {
                 roll = false;
                 player++;
