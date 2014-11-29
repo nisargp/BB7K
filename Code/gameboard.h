@@ -53,9 +53,12 @@ public:
     int getNumSiblings(std::string block);
     Player* getPlayer(std::string name);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Player* getPlayer(int position);
 =======
     int getNumPlayers();
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     
     // Change values
